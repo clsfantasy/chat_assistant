@@ -1,6 +1,5 @@
 # 环境配置指南：Docker 与现代 Python 工程化
 
-**主讲人**：[你的名字]  
 **时长**：约 20 分钟  
 **目标**：解决“环境一致性”问题，并建立“现代化”的项目管理思维。
 
@@ -94,10 +93,9 @@ docker pull clsfantasy/gemini-chat-assistant:latest
 **Windows (PowerShell) 启动命令：**
 
 ```powershell
-docker run -it --rm `
-  -e GEMINI_API_KEY="你的实际API_KEY" `
-  -e HTTP_PROXY="http://host.docker.internal:7890" `
-  -e HTTPS_PROXY="http://host.docker.internal:7890" `
+docker run -it --rm 
+  -e HTTP_PROXY="http://host.docker.internal:7897" 
+  -e HTTPS_PROXY="http://host.docker.internal:7897" 
   clsfantasy/gemini-chat-assistant:latest
 ```
 

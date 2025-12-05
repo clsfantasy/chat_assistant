@@ -27,7 +27,7 @@ docker build -t gemini-chat .
 使用以下命令启动聊天助手，请将 `YOUR_API_KEY_HERE` 替换为你实际的 API Key：
 
 ```bash
-docker run -it --rm -e GEMINI_API_KEY=你的KEY -e HTTP_PROXY=http://host.docker.internal:7897 -e HTTPS_PROXY=http://host.docker.internal:7897 gemini-chat
+docker run -it --rm  -e HTTP_PROXY=http://host.docker.internal:7897 -e HTTPS_PROXY=http://host.docker.internal:7897 gemini-chat
 ```
 
 注意：必须使用 `-it` 参数，以便能够与终端进行交互输入。
