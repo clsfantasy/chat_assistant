@@ -72,7 +72,74 @@ docker stop <容器ID>
 docker rm <容器ID>
 ```
 
-### 3. 本项目实战：获取 Gemini Chat Assistant
+### 3. Dockerfile 与镜像构建：将代码打包
+
+前面我们学会了拉取现有的镜像来运行容器。但更多时候，我们需要将自己的项目代码打包成一个镜像。这时，就需要编写 `Dockerfile`。
+
+`Dockerfile` 是一个包含用户可以调用来组装镜像的所有命令的文本文档。你可以把它想象成制作镜像的“菜谱”。
+
+**常用指令速查：**
+
+*   `FROM`：指定基础镜像。例如 `FROM python:3.9-slim-buster`。
+*   `WORKDIR`：设置工作目录。后续命令（如 `COPY`, `RUN`, `CMD`）都会在该目录下执行。
+*   `COPY`：复制文件或目录到镜像中。
+*   `RUN`：在镜像构建过程中执行命令。常用于安装依赖。
+*   `EXPOSE`：声明容器运行时监听的端口。
+*   `ENV`：设置环境变量。
+*   `CMD`：容器启动时执行的默认命令。
+
+**示例 `Dockerfile` (适用于本项目或其他 Python 项目)：**
+
+在项目根目录下创建一个名为 `Dockerfile` 的文件，内容如下：
+
+```dockerfile
+# 使用官方 Python 3.9 的轻量级镜像作为基础
+FROM python:3.9-slim-buster
+
+# 设置工作目录
+WORKDIR /app
+
+# 将当前目录下的 requirements.txt 复制到容器的 /app 目录下
+COPY requirements.txt .
+
+# 安装 Python 依赖
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 将当前项目的所有文件复制到容器的 /app 目录下
+COPY . .
+
+# 暴露端口 (如果你的应用是 Web 服务)
+# EXPOSE 8000
+
+# 定义容器启动时要执行的命令
+CMD ["python", "chat.py"]
+```
+
+**构建镜像：**
+
+在 `Dockerfile` 所在的目录 (即项目根目录) 执行以下命令：
+
+```bash
+
+docker build -t clsfantasy/gemini-chat-assistant:latest .
+```
+
+*   `-t` (Tag)：给镜像命名和打标签。`<your-username>/<image-name>:<tag>` 是推荐格式。
+*   `.`：表示 `Dockerfile` 在当前目录下。
+
+构建成功后，你就可以用 `docker run` 命令来运行你的新镜像了！
+
+**分享镜像：推送 (Push)**
+
+如果你想在服务器或其他电脑上使用这个镜像，需要先将其推送到 Docker Hub：
+
+1.  **登录**：`docker login -u <your-username>`
+2.  **推送**：
+    ```bash
+    docker push <your-username>/<image-name>:<tag>
+    ```
+
+### 4. 本项目实战：获取 Gemini Chat Assistant
 
 如果你想直接运行本项目，无需配置本地 Python 环境，请直接拉取镜像：
 
@@ -98,7 +165,7 @@ docker run -it --rm
 *   `host.docker.internal`: Docker Desktop 提供的特殊 DNS，允许容器访问宿主机网络。
 *   `:7890`: 请替换为你本机代理软件（Clash/v2rayN）的实际端口。
 
-### 4. 关键问题：如何离线发给师弟？
+### 5. 关键问题：如何离线发给师弟？
 
 国内网络环境差，或者服务器在内网，直接传文件最稳：
 
