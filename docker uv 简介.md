@@ -1,7 +1,5 @@
 # 环境配置指南：Docker 与现代 Python 工程化
 
-**时长**：约 20 分钟  
-**目标**：解决“环境一致性”问题，并建立“现代化”的项目管理思维。
 
 ---
 
@@ -18,13 +16,11 @@
 
 *(核心逻辑参考 B站 CodeSheep《40分钟Docker实战》)*
 
+
 ### 1. 核心概念：集装箱思维
 
 Docker 并不是虚拟机，它更像是一个轻量级的“应用集装箱”。
 
-> **[建议插入图片]**  
-> 搜索关键词：[Docker vs Virtual Machine 架构图]  
-> 重点展示：虚拟机包含 Guest OS（重），Docker 共享 Host OS Kernel（轻）。
 
 **三个核心名词：**
 
@@ -128,9 +124,6 @@ docker run -it --rm
 
 uv 不仅仅是一个“更快的 pip”，它是 Cargo (Rust) 理念在 Python 的实现。它把 pip, pip-tools, virtualenv, pyenv, poetry 全部统一成了一个工具。
 
-> **[建议插入图片]**  
-> 搜索关键词：[uv speed benchmark]  
-> 展示 uv 秒级安装的柱状图对比。
 
 **核心工作流 (Hands-on)：**
 
