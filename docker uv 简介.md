@@ -14,7 +14,7 @@
 
 ## 第一部分：Docker —— 容器化实战攻略
 
-*(核心逻辑参考 B站 CodeSheep《40分钟Docker实战》)*
+*(核心逻辑参考 [B站 《40分钟Docker实战》](https://www.bilibili.com/video/BV1THKyzBER6/?vd_source=8d44b9ea4267f6ac1f57ae9bc9718295))*
 
 
 ### 1. 核心概念：集装箱思维
@@ -177,7 +177,7 @@ docker run -it --rm
 
 ## 第二部分：从 pip 到 uv —— 现代 Python 项目管理
 
-*(参考 B站“从pip到uv”视频核心理念)*
+*(参考 [“从pip到uv”视频核心理念](https://www.bilibili.com/video/BV13WGHz8EEz/?vd_source=8d44b9ea4267f6ac1f57ae9bc9718295))*
 
 ### 1. 为什么要抛弃 pip / requirements.txt？
 
@@ -239,7 +239,7 @@ uv python pin 3.10
 
 uv 虽然强，但在深度学习领域，Conda 依然有壁垒。
 
-| 维度 | uv (现代派) | Conda (传统派) |
+| 维度 | uv  | Conda |
 | :--- | :--- | :--- |
 | **核心理念** | 项目级隔离 (`pyproject.toml`) | 环境级隔离 (Anaconda 目录) |
 | **杀手锏** | 极速 (秒级)、标准化、Lock文件 | 二进制库管理 (CUDA, cudnn, GDAL) |
