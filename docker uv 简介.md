@@ -80,7 +80,7 @@ docker rm <容器ID>
 
 **常用指令速查：**
 
-*   `FROM`：指定基础镜像。例如 `FROM python:3.9-slim-buster`。
+*   `FROM`：指定基础镜像。例如 `FROM python:3.10-slim`。
 *   `WORKDIR`：设置工作目录。后续命令（如 `COPY`, `RUN`, `CMD`）都会在该目录下执行。
 *   `COPY`：复制文件或目录到镜像中。
 *   `RUN`：在镜像构建过程中执行命令。常用于安装依赖。
@@ -93,8 +93,8 @@ docker rm <容器ID>
 在项目根目录下创建一个名为 `Dockerfile` 的文件，内容如下：
 
 ```dockerfile
-# 使用官方 Python 3.9 的轻量级镜像作为基础
-FROM python:3.9-slim-buster
+# 使用官方 Python 3.10 的轻量级镜像作为基础
+FROM python:3.10-slim
 
 # 设置工作目录
 WORKDIR /app
@@ -163,7 +163,7 @@ docker run -it --rm
 ```
 
 *   `host.docker.internal`: Docker Desktop 提供的特殊 DNS，允许容器访问宿主机网络。
-*   `:7890`: 请替换为你本机代理软件（Clash/v2rayN）的实际端口。
+*   `:7897`: 请替换为你本机代理软件（Clash/v2rayN）的实际端口。
 
 ### 5. 关键问题：如何离线发给师弟？
 
@@ -181,11 +181,11 @@ docker run -it --rm
 
 ### 1. 为什么要抛弃 pip / requirements.txt？
 
-传统的 `pip install` + `requirements.txt` 有三个致命缺陷：
+传统的 `pip install` + `requirements.txt` 有三个缺陷：
 
-1.  **锁不住依赖**：你写 `pandas`，它今天装 1.0，明天装 2.0，代码可能就挂了。
-2.  **环境污染**：所有包都装在一起，A项目要 `numpy 1.2`，B项目要 `numpy 2.0`，直接打架。
-3.  **慢**：pip 是串行下载，uv 是并行下载。
+1.  **依赖锁定繁琐**：`requirements.txt` 通常只记录顶层依赖。若需锁定所有子依赖版本，需手动维护复杂的列表，否则容易因传递依赖版本自动升级导致环境不一致。
+2.  **环境隔离需自觉**：`pip` 默认安装在当前环境（若无虚拟环境则为全局），多项目并行时容易产生版本冲突。`uv` 能够自动管理项目级虚拟环境。
+3.  **安装速度差异**：`pip` 串行下载，`uv` 基于 Rust 实现并行下载与缓存机制，速度提升显著。
 
 ### 2. 什么是“现代”管理流？(uv)
 
@@ -206,7 +206,7 @@ pip install uv  # 或者 curl 安装
 uv init my-project
 cd my-project
 ```
-*变化*：它会自动生成一个 `pyproject.toml`。这是现代 Python 的唯一真理标准，以后别再手写 `requirements.txt` 了。
+*变化*：它会自动生成一个 `pyproject.toml`。这是现代 Python 推荐的项目配置标准，替代传统的手动维护 `requirements.txt`。
 
 **2. 声明式添加依赖 (Add)**
 
@@ -216,7 +216,7 @@ uv add numpy requests
 *发生了什么*：
 *   自动创建虚拟环境 `.venv` (不用你操心)。
 *   自动下载最新兼容版本。
-*   自动生成 `uv.lock` (全平台锁定文件，保证师弟装出来的包和你一模一样，一个 bit 都不差)。
+*   自动生成 `uv.lock` (全平台锁定文件，保证其他人安装的包版本完全一致)。
 
 **3. 运行 (Run)**
 
@@ -244,7 +244,7 @@ uv 虽然强，但在深度学习领域，Conda 依然有壁垒。
 | **核心理念** | 项目级隔离 (`pyproject.toml`) | 环境级隔离 (Anaconda 目录) |
 | **杀手锏** | 极速 (秒级)、标准化、Lock文件 | 二进制库管理 (CUDA, cudnn, GDAL) |
 | **谁在用** | 后端开发、工具开发、数据分析、90%的场景 | 深度学习 (PyTorch/TF)、生物信息、地理信息 |
-| **缺点** | 装不了系统级的非 Python 库 (如 C++ 动态库) | 慢、臃肿、Solver 容易卡死 |
+| **缺点** | 装不了系统级的非 Python 库 (如 C++ 动态库) | 较慢、臃肿、复杂依赖解析耗时较长 |
 
 ### 总结建议
 
@@ -253,11 +253,11 @@ uv 虽然强，但在深度学习领域，Conda 依然有壁垒。
     *   *理由*：uv 目前还不能完美解决 pytorch-cuda 这种复杂的底层驱动依赖。
 
 2.  **写 Python 工具 / 爬虫 / Web / 数据脚本**：
-    *   无脑用 **uv**。
-    *   *理由*：体验碾压 Conda，且符合现代 Python 标准。
+    *   推荐使用 **uv**。
+    *   *理由*：体验优于 Conda，且符合现代 Python 标准。
 
 3.  **要给别人交付代码**：
     *   **Docker**。
-    *   *理由*：这是终极方案。
+    *   *理由*：这是通用的交付方案。
 
 [演示代码仓库](https://github.com/clsfantasy/chat_assistant.git)
