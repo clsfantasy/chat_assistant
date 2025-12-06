@@ -259,3 +259,6 @@ uv 虽然强，但在深度学习领域，Conda 依然有壁垒。
 3.  **要给别人交付代码**：
     *   **Docker**。
     *   *理由*：这是终极方案。
+*   
+
+[演示代码仓库](https://github.com/clsfantasy/chat_assistant.git)
